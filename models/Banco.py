@@ -20,8 +20,8 @@ if os.environ.get('DATBASE_URL') is None:
     SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:admin@localhost/procampus'
 else:
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
-    
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/procampus'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
