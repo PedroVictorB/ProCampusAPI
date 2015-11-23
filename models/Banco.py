@@ -8,10 +8,21 @@ from sqlalchemy import DateTime, Column
 from flask import Flask
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
+import os
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/procampus'
+
+DEBUG = True
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+if os.environ.get('DATABASE_URL') is None:
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:admin@localhost/procampus'
+else:
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+
+app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
