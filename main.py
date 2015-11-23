@@ -23,7 +23,8 @@ def createUser():
     if request.method == 'POST':
         u = User(
             name=request.form.get('name'),
-            email=request.form.get('email')
+            email=request.form.get('email'),
+            matricula=request.form.get('matricula')
         )
         db.session.add(u)
         db.session.commit()
@@ -38,7 +39,7 @@ def readUser(id):
     if u == None:
         return jsonify({'error': 'user not found'})
     else:
-        return jsonify({'id': u.id, 'name': u.name, 'email': u.email, 'date': str(u.date)})
+        return jsonify({'id': u.id, 'name': u.name, 'email': u.email, 'date': str(u.date), 'matricula':u.matricula})
 
 
 @app.route('/user/readAll')
@@ -48,7 +49,7 @@ def readAllUser():
     if users == None:
         return jsonify({'error': 'no users'})
     for u in users:
-        dict_user.append({'id': u.id, 'name': u.name, 'email': u.email, 'date': str(u.date)})
+        dict_user.append({'id': u.id, 'name': u.name, 'email': u.email, 'date': str(u.date), 'matricula':u.matricula})
 
     return jsonify(users=dict_user)
 

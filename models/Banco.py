@@ -10,7 +10,7 @@ from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 
 app = Flask(__name__)
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/procampus'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/procampus'
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -21,6 +21,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(40))
     email = db.Column(db.String(80), unique=True)
+    matricula = db.Column(db.Integer, unique=True)
     date = Column(DateTime, default=datetime.datetime.utcnow)
 
 
