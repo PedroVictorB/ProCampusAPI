@@ -35,7 +35,7 @@ def readUser(id):
     if u == None:
         return jsonify({'error':'user not found'})
     else:
-        return jsonify(u.row2dict())#({'id':u.id, 'name':u.name, 'email':u.email, 'date':str(u.date)})
+        return jsonify({'id':u.id, 'name':u.name, 'email':u.email, 'date':str(u.date)})
 
 @app.route('/user/readAll')
 def readAllUser():
