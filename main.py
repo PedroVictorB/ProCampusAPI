@@ -41,6 +41,14 @@ def readUser(id):
     else:
         return jsonify({'id': u.id, 'name': u.name, 'email': u.email, 'date': str(u.date), 'matricula':u.matricula})
 
+@app.route('/user/matricula/<string:matricula>')
+def readMatriculaUser(matricula):
+    u = User.query.filter_by(matricula=matricula).first()
+    if u == None:
+        return jsonify({'error': 'user not found'})
+    else:
+        return jsonify({'id': u.id, 'name': u.name, 'email': u.email, 'date': str(u.date), 'matricula':u.matricula})
+
 
 @app.route('/user/readAll')
 def readAllUser():

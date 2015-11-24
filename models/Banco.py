@@ -33,7 +33,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(40))
     email = db.Column(db.String(80), unique=True)
-    matricula = db.Column(db.String(15), unique=True)
+    matricula = db.Column(db.String(40), unique=True)
     date = Column(DateTime, default=datetime.datetime.utcnow)
 
 
