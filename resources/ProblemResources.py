@@ -1,6 +1,6 @@
 __author__ = 'pedro'
 
-from models.Banco import Problem, db
+from models.Banco import Problem, db, User
 from flask import request, jsonify, Blueprint
 
 problem_route = Blueprint('problem', __name__)
@@ -35,9 +35,10 @@ def readAllProblem():
         return jsonify({'error': 'problems not found'})
     else:
         for p in problems:
+            user = User.query.get(p.user)
             list.append({'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date),
                          'description': p.description, 'latitude': p.latitude, 'longitude': p.longitude,
-                         'user': p.user})
+                         'user': p.user, 'name':user.name})
         return jsonify(problems=list)
 
 
