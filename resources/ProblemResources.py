@@ -72,7 +72,11 @@ def updateProblem():
     return 'Update'
 
 
-@problem_route.route('/problem/delete')
-def deleteProblem():
-    return 'Delete'
+@problem_route.route('/problem/delete/<int:id>')
+def deleteProblem(id):
+    p = Problem.query.get(id)
+    if p is None:
+        return jsonify({'error': 'problem not found'})
+    db.session.delete(p)
+    return jsonify({'success': 'problem deleted'})
 
