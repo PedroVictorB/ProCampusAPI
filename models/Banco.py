@@ -1,13 +1,15 @@
 from flask.ext.heroku import Heroku
+from sqlalchemy.orm import deferred
 
 __author__ = 'pedro'
 
 import datetime
 from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy import DateTime, Column
+from sqlalchemy import DateTime, Column, Binary
 from flask import Flask
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
+from sqlalchemy.types import LargeBinary
 import os
 
 app = Flask(__name__)
@@ -18,7 +20,8 @@ DEBUG = True
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 if os.environ.get('DATABASE_URL') is None:
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:admin@localhost/procampus'
+    #SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:admin@localhost/procampus'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:admin@localhost/procampus'
 else:
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 
@@ -59,6 +62,10 @@ class Comentario(db.Model):
     problem = db.Column(db.Integer, db.ForeignKey('problem.id'))
     text = db.Column(db.String(120))
     date = Column(DateTime, default=datetime.datetime.utcnow)
+
+class Teste(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    image = deferred(Column(Binary))
 
 if __name__ == '__main__':
     manager.run()
