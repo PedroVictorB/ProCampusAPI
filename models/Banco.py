@@ -20,8 +20,8 @@ DEBUG = True
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 if os.environ.get('DATABASE_URL') is None:
-    #SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:admin@localhost/procampus'
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:admin@localhost/procampus'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:admin@localhost/procampus'
+    #SQLALCHEMY_DATABASE_URI = 'mysql://root:admin@localhost/procampus'
 else:
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 
@@ -49,6 +49,7 @@ class Problem(db.Model):
     longitude = db.Column(db.Float)
     date = Column(DateTime, default=datetime.datetime.utcnow)
     user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    image = deferred(Column(LargeBinary))
 
 class Follower(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -65,7 +66,7 @@ class Comentario(db.Model):
 
 class Teste(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    image = deferred(Column(Binary))
+    image = deferred(Column(LargeBinary))
 
 if __name__ == '__main__':
     manager.run()

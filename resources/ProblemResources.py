@@ -14,14 +14,27 @@ def problem():
 @problem_route.route('/problem/create', methods=['GET', 'POST'])
 def createProblem():
     if request.method == 'POST':
-        p = Problem(
-            title=request.form.get('title'),
-            category=request.form.get('category'),
-            description=request.form.get('description'),
-            latitude=request.form.get('latitude'),
-            longitude=request.form.get('longitude'),
-            user=request.form.get('user'),
-        )
+        image = request.files['image']
+        if image:
+            file = image.read()
+            p = Problem(
+                title=request.form.get('title'),
+                category=request.form.get('category'),
+                description=request.form.get('description'),
+                latitude=request.form.get('latitude'),
+                longitude=request.form.get('longitude'),
+                user=request.form.get('user'),
+                image=file,
+            )
+        else:
+            p = Problem(
+                title=request.form.get('title'),
+                category=request.form.get('category'),
+                description=request.form.get('description'),
+                latitude=request.form.get('latitude'),
+                longitude=request.form.get('longitude'),
+                user=request.form.get('user'),
+            )
         db.session.add(p)
         db.session.commit()
         return jsonify({'id': p.id})
@@ -38,7 +51,7 @@ def readAllProblem():
             user = User.query.get(p.user)
             list.append({'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date),
                          'description': p.description, 'latitude': p.latitude, 'longitude': p.longitude,
-                         'user': p.user, 'name':user.name})
+                         'user': p.user, 'name':user.name, 'image':p.image})
         return jsonify(problems=list)
 
 
@@ -50,7 +63,7 @@ def readProblem(id):
     else:
         return jsonify(
             {'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date), 'description': p.description,
-             'latitude': p.latitude, 'longitude': p.longitude, 'user': p.user})
+             'latitude': p.latitude, 'longitude': p.longitude, 'user': p.user, 'image':p.image})
 
 
 @problem_route.route('/problem/user/<int:id>')
@@ -63,7 +76,7 @@ def userProblem(id):
         if p.user == id:
             list.append({'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date),
                          'description': p.description, 'latitude': p.latitude, 'longitude': p.longitude,
-                         'user': p.user})
+                         'user': p.user, 'image':p.image})
     return jsonify(problems=list)
 
 
