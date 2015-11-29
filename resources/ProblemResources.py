@@ -1,3 +1,5 @@
+import base64
+
 __author__ = 'pedro'
 
 from models.Banco import Problem, db, User
@@ -51,7 +53,7 @@ def readAllProblem():
             user = User.query.get(p.user)
             list.append({'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date),
                          'description': p.description, 'latitude': p.latitude, 'longitude': p.longitude,
-                         'user': p.user, 'name':user.name, 'image':p.image})
+                         'user': p.user, 'name':user.name, 'image':base64.encodestring(p.image)})
         return jsonify(problems=list)
 
 
@@ -63,7 +65,7 @@ def readProblem(id):
     else:
         return jsonify(
             {'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date), 'description': p.description,
-             'latitude': p.latitude, 'longitude': p.longitude, 'user': p.user, 'image':p.image})
+             'latitude': p.latitude, 'longitude': p.longitude, 'user': p.user, 'image':base64.encodestring(p.image)})
 
 
 @problem_route.route('/problem/user/<int:id>')
@@ -76,7 +78,7 @@ def userProblem(id):
         if p.user == id:
             list.append({'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date),
                          'description': p.description, 'latitude': p.latitude, 'longitude': p.longitude,
-                         'user': p.user, 'image':p.image})
+                         'user': p.user, 'image':base64.encodestring(p.image)})
     return jsonify(problems=list)
 
 
