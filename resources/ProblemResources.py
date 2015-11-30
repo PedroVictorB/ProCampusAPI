@@ -51,9 +51,28 @@ def readAllProblem():
     else:
         for p in problems:
             user = User.query.get(p.user)
+            if p.image is None:
+                list.append({'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date),
+                             'description': p.description, 'latitude': p.latitude, 'longitude': p.longitude,
+                             'user': p.user, 'name':user.name})
+            else:
+                list.append({'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date),
+                             'description': p.description, 'latitude': p.latitude, 'longitude': p.longitude,
+                             'user': p.user, 'name':user.name, 'image':base64.encodestring(p.image)})
+        return jsonify(problems=list)
+
+@problem_route.route('/problem/readAllNoImg')
+def readAllProblemNoImg():
+    problems = Problem.query.all()
+    list = []
+    if problems == None:
+        return jsonify({'error': 'problems not found'})
+    else:
+        for p in problems:
+            user = User.query.get(p.user)
             list.append({'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date),
                          'description': p.description, 'latitude': p.latitude, 'longitude': p.longitude,
-                         'user': p.user, 'name':user.name, 'image':base64.encodestring(p.image)})
+                         'user': p.user, 'name':user.name})
         return jsonify(problems=list)
 
 
@@ -67,15 +86,29 @@ def readProblem(id):
             {'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date), 'description': p.description,
              'latitude': p.latitude, 'longitude': p.longitude, 'user': p.user, 'image':base64.encodestring(p.image)})
 
+@problem_route.route('/problem/readNoImg/<int:id>')
+def readProblemNoImg(id):
+    p = Problem.query.get(id)
+    if p == None:
+        return jsonify({'error': 'problem not found'})
+    else:
+        return jsonify(
+            {'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date), 'description': p.description,
+             'latitude': p.latitude, 'longitude': p.longitude, 'user': p.user})
+
 
 @problem_route.route('/problem/user/<int:id>')
 def userProblem(id):
-    problems = Problem.query.all()
+    problems = Problem.query.filter_by(user=id)
     list = []
     if problems == None:
         return jsonify({'error': 'no problems'})
     for p in problems:
-        if p.user == id:
+        if p.image is None:
+            list.append({'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date),
+                         'description': p.description, 'latitude': p.latitude, 'longitude': p.longitude,
+                         'user': p.user})
+        else:
             list.append({'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date),
                          'description': p.description, 'latitude': p.latitude, 'longitude': p.longitude,
                          'user': p.user, 'image':base64.encodestring(p.image)})

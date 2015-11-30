@@ -36,6 +36,18 @@ def readAllComment():
         return jsonify(comments=list)
 
 
+@comment_route.route('/comment/problem/<int:id>')
+def readAllCommentProblems(id):
+    comments = Comentario.query.filter_by(problem=id)
+    list = []
+    if comments == None:
+        return jsonify({'error': 'comments not found'})
+    else:
+        for c in comments:
+            list.append({'id': c.id, 'user': c.user, 'problem': c.problem, 'date': str(c.date), 'text': c.text})
+        return jsonify(comments=list)
+
+
 @comment_route.route('/comment/read/<int:id>')
 def readComment(id):
     c = Comentario.query.get(id)
@@ -47,13 +59,12 @@ def readComment(id):
 
 @comment_route.route('/comment/user/<int:id>')
 def userComment(id):
-    comments = Comentario.query.all()
+    comments = Comentario.query.filter_by(user=id)
     list = []
     if comments == None:
         return jsonify({'error': 'no comments'})
     for c in comments:
-        if c.user == id:
-            list.append({'id': c.id, 'user': c.user, 'problem': c.problem, 'date': str(c.date), 'text': c.text})
+        list.append({'id': c.id, 'user': c.user, 'problem': c.problem, 'date': str(c.date), 'text': c.text})
     return jsonify(problems=list)
 
 
