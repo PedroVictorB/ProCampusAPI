@@ -115,6 +115,19 @@ def userProblem(id):
     return jsonify(problems=list)
 
 
+@problem_route.route('/problem/userNoImg/<int:id>')
+def userProblemNoImg(id):
+    problems = Problem.query.filter_by(user=id)
+    list = []
+    if problems == None:
+        return jsonify({'error': 'no problems'})
+    for p in problems:
+        list.append({'id': p.id, 'title': p.title, 'category': p.category, 'date': str(p.date),
+                     'description': p.description, 'latitude': p.latitude, 'longitude': p.longitude,
+                     'user': p.user})
+    return jsonify(problems=list)
+
+
 @problem_route.route('/problem/update')
 def updateProblem():
     return 'Update'
